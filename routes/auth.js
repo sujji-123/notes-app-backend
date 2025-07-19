@@ -3,6 +3,8 @@ import User from '../models/User.js'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import middleware from '../middleware/middleware.js'
+import dotenv from 'dotenv'
+dotenv.config()
 
 const authrouter = express.Router()
 
@@ -16,7 +18,8 @@ authrouter.post('/register', async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
         const user = new User({ name, email, password: hashedPassword });
         await user.save();
-        const token = jwt.sign({ id: user._id }, "secretkeyofnoteapp123@#");
+        // eslint-disable-next-line no-undef
+        const token = jwt.sign({ id: user._id }, process.env.JWT_TOKEN);
         return res.status(200).json({ success: true, token, user: { name: user.name, email: user.email }, message: "Account Created Successfully" });
     } catch (error) {
         console.error("User registration error:", error);
@@ -35,7 +38,8 @@ authrouter.post('/login', async (req, res) => {
         if (!checkpassword) {
             return res.status(401).json({ success: false, message: "Wrong Credentials" });
         }
-        const token = jwt.sign({ id: user._id }, "secretkeyofnoteapp123@#", { expiresIn: "5h" });
+        // eslint-disable-next-line no-undef
+        const token = jwt.sign({ id: user._id }, process.env.JWT_TOKEN, { expiresIn: "5h" });
         return res.status(200).json({ success: true, token, user: { name: user.name, email: user.email }, message: "Login Successful" });
     } catch (error) {
         console.error("User login error:", error);

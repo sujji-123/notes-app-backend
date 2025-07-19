@@ -1,8 +1,10 @@
 import mongoose from "mongoose"
-
+import dotenv from "dotenv"
+dotenv.config()
 const connectToDB = async () =>{
     try {
-        await mongoose.connect('mongodb+srv://babunkundu60:0EEN18UaPa93Fk91@stminorg27.plp450e.mongodb.net/sujji_notes_app?retryWrites=true&w=majority&appName=stminorg27');
+        // eslint-disable-next-line no-undef
+        await mongoose.connect(process.env.MONGO_URL);
         console.log("connected to MongoDB");
 
     }catch (error) {

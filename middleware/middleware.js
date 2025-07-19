@@ -1,5 +1,7 @@
 import jwt from 'jsonwebtoken'
 import User from '../models/User.js'
+import dotenv from 'dotenv'
+dotenv.config()
 
 const middleware = async (req, res, next) => {
     try {
@@ -15,7 +17,8 @@ const middleware = async (req, res, next) => {
 
         let decoded;
         try {
-            decoded = jwt.verify(token, "secretkeyofnoteapp123@#");
+            // eslint-disable-next-line no-undef
+            decoded = jwt.verify(token,process.env.JWT_TOKEN);
         } catch (err) {
             return res.status(401).json({ success: false, message: "Invalid or expired token" });
         }
